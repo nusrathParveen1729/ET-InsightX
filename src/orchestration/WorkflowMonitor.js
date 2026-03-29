@@ -1,36 +1,48 @@
+import { supabase } from '../lib/supabaseClient';
+
 class WorkflowMonitor {
   constructor() {
-    this.logs = [];
+    this.localCache = [];
     this.listeners = [];
   }
 
-  logEvent(processId, step, agentName, status, duration = 0, sla = 0, details = null) {
+  async logEvent(processId, step, agentName, status, duration = 0, sla = 0, details = null) {
     const isViolation = duration > sla && sla > 0;
-    const entry = {
-      id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
-      processId,
-      timestamp: new Date().toISOString(),
-      step,
-      agentName,
-      status,
-      duration,
-      sla,
-      isViolation,
-      details
+    
+    // Create the structured data payload
+    const logData = {
+      process_id: processId,
+      step: step,
+      agent_name: agentName,
+      status: status,
+      duration: duration,
+      sla_ms: sla,
+      is_violation: isViolation,
+      details: details
     };
     
-    this.logs.unshift(entry);
-    
-    // Keep only last 100 logs in memory
-    if (this.logs.length > 100) this.logs.pop();
-    
-    this.notifyListeners();
+    try {
+      // Execute live DB Insert instead of memory caching
+      const { data, error } = await supabase
+        .from('workflow_logs')
+        .insert([logData])
+        .select();
+
+      if (error) {
+        console.error("Workflow Monitor Database Error:", error);
+      } else {
+        // Success
+        this.localCache.unshift(data[0]);
+        if (this.localCache.length > 50) this.localCache.pop();
+        this.notifyListeners();
+      }
+
+    } catch (err) {
+      console.error("Critical Exception in Workflow Monitor Database Layer:", err);
+    }
   }
 
-  getLogs() {
-    return this.logs;
-  }
-
+  // Live subscription function used by React pages
   subscribe(callback) {
     this.listeners.push(callback);
     return () => {
@@ -39,9 +51,8 @@ class WorkflowMonitor {
   }
 
   notifyListeners() {
-    this.listeners.forEach(cb => cb([...this.logs]));
+    this.listeners.forEach(cb => cb([...this.localCache]));
   }
 }
 
-// Singleton instance for the frontend prototype
 export const globalMonitor = new WorkflowMonitor();

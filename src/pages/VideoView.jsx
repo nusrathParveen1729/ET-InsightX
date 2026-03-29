@@ -54,11 +54,11 @@ export default function VideoView() {
         </div>
 
         {videoState === 'idle' && (
-          <div className="card flex flex-col items-center justify-center p-12 text-center shadow-lg border border-gray-200" style={{minHeight: '400px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+          <div className="card flex flex-col items-center justify-center p-12 text-center shadow-lg border border-gray-200" style={{minHeight: '400px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', borderRadius: '0px'}}>
             <Video size={48} className="text-secondary mb-4" />
             <h2 className="text-2xl font-bold font-serif mb-2">Automated Orchestration Setup</h2>
             <p className="text-secondary max-w-md mx-auto mb-6">Dispatch a fully autonomous multi-agent chain (Retrieval ➔ Decision ➔ Execution ➔ Verification) to process and render a broadcast ready asset.</p>
-            <button className="btn-primary" onClick={handleGenerate} style={{padding: '12px 24px', fontSize: '1.1rem'}}>
+            <button className="btn-primary" onClick={handleGenerate} style={{padding: '12px 24px', fontSize: '1.1rem', borderRadius: '0px'}}>
               <Sparkles size={18} /> Initialize Orchestrator Loop
             </button>
           </div>
@@ -86,7 +86,7 @@ export default function VideoView() {
 
             <div className="flex-1 flex-col justify-center">
               <h3 className="section-title-small mb-4 text-secondary flex-center gap-2"><Settings size={16}/> Live Terminal Logs</h3>
-              <div className="bg-secondary p-4 rounded text-xs font-mono" style={{background: '#111', color: '#0f0', minHeight: '150px', maxHeight: '300px', overflowY: 'auto'}}>
+              <div className="bg-secondary p-4 text-xs font-mono" style={{background: '#111', color: '#0f0', minHeight: '150px', maxHeight: '300px', overflowY: 'auto', borderRadius: '0px'}}>
                 {orchestratorLogs.map((log, i) => (
                   <div key={i} className="mb-2 opacity-80">&gt; {log}</div>
                 ))}
@@ -101,7 +101,7 @@ export default function VideoView() {
         {videoState === 'generated' && (
           <div className="animate-fade-in">
             {/* Mock Video Player */}
-            <div className="video-player-container relative rounded-lg bg-black aspect-video overflow-hidden shadow-lg group">
+            <div className="video-player-container relative bg-black aspect-video overflow-hidden shadow-lg group" style={{borderRadius: '0px'}}>
               {/* Overlay Content */}
               <div className="video-overlay absolute inset-0 flex flex-col justify-end p-6">
                 
@@ -150,7 +150,7 @@ export default function VideoView() {
                     {h.title}
                   </h3>
                   <p className="text-secondary text-sm">{h.summary}</p>
-                  <span className={`timestamp-badge text-xs font-bold ${i%2===0?'red bg-red-light':'success bg-green-light'} mt-3 inline-block rounded`}>{h.time}</span>
+                  <span className={`timestamp-badge text-xs font-bold ${i%2===0?'red bg-red-light':'success bg-green-light'} mt-3 inline-block`} style={{borderRadius: '0px', padding: '4px 8px'}}>{h.time}</span>
                 </div>
               ))}
             </div>

@@ -2,10 +2,12 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import Home from './pages/Home';
+import Landing from './pages/Landing';
 import NewsNav from './pages/NewsNav';
 import VideoView from './pages/VideoView';
 import StoryTracker from './pages/StoryTracker';
 import AdminMonitor from './pages/AdminMonitor';
+import AIChatWidget from './components/AIChatWidget';
 import { AppProvider } from './context/AppContext';
 import './index.css';
 import './app-styles.css';
@@ -17,12 +19,14 @@ function App() {
         <div className="app-wrapper">
           <Navigation />
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Landing />} />
+            <Route path="/home" element={<Home />} />
             <Route path="/news" element={<NewsNav />} />
             <Route path="/video" element={<VideoView />} />
             <Route path="/tracker" element={<StoryTracker />} />
             <Route path="/monitor" element={<AdminMonitor />} />
           </Routes>
+          <AIChatWidget />
         </div>
       </Router>
     </AppProvider>

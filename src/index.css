@@ -2,29 +2,37 @@
 
 :root {
   --bg-primary: #ffffff;
-  --bg-secondary: #f9f8f4; /* Subtle beige */
+  --bg-secondary: #fdfdfc;
   --bg-tertiary: #f1f0eb;
-  
-  --text-primary: #111111;
-  --text-secondary: #4a4a4a;
-  --text-tertiary: #757575;
-  
+  --text-primary: #0a0a0b;
+  --text-secondary: #52525b;
+  --text-tertiary: #a1a1aa;
+  --card-bg: #ffffff;
+  --card-border: rgba(0,0,0,0.1);
   --accent-red: #d91a1a;
   --accent-red-hover: #b01515;
-  
-  --positive-green: #0a8f4c;
-  --negative-red: #d91a1a;
-  
   --font-serif: 'Merriweather', Georgia, serif;
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
-  
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.06), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+}
+
+[data-theme='dark'] {
+  --bg-primary: #0a0a0b;
+  --bg-secondary: #141416;
+  --bg-tertiary: #1c1c1e;
+  --text-primary: #fdfdfd;
+  --text-secondary: #a1a1aa;
+  --text-tertiary: #52525b;
+  --card-bg: #111113;
+  --card-border: #222225;
+  --accent-red: #ff4d4d;
+  --accent-red-hover: #ff3333;
+  --theme-hero-bg: linear-gradient(135deg, rgba(217, 26, 26, 0.1) 0%, rgba(10, 10, 11, 1) 100%);
 }
 
 * {
@@ -37,7 +45,8 @@ body {
   font-family: var(--font-sans);
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  line-height: 1.5;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -93,17 +102,18 @@ button {
 
 /* App utility classes */
 .card {
-  background: var(--bg-primary);
-  border: 1px solid rgba(0,0,0,0.05);
-  border-radius: var(--radius-md);
+  background: var(--card-bg);
+  border: 1.5px solid var(--card-border);
+  border-radius: 0px;
   box-shadow: var(--shadow-sm);
   padding: 1.5rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .card.interactive:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(217, 26, 26, 0.1);
 }
 
 .tag {
@@ -113,7 +123,7 @@ button {
   text-transform: uppercase;
   letter-spacing: 0.05em;
   padding: 0.25rem 0.6rem;
-  border-radius: 999px;
+  border-radius: 0px;
   background: var(--bg-secondary);
   color: var(--accent-red);
   margin-bottom: 0.5rem;
@@ -128,7 +138,7 @@ button {
   background-color: var(--accent-red);
   color: white;
   padding: 0.75rem 1.5rem;
-  border-radius: var(--radius-sm);
+  border-radius: 0px;
   font-weight: 500;
   transition: background-color 0.2s;
   display: inline-flex;
@@ -146,7 +156,7 @@ button {
   background-color: transparent;
   color: var(--text-primary);
   padding: 0.5rem 1rem;
-  border-radius: var(--radius-sm);
+  border-radius: 0px;
   font-weight: 500;
   transition: all 0.2s;
 }
@@ -193,11 +203,12 @@ button {
   left: 0;
   right: 0;
   background-color: var(--bg-primary);
-  border-bottom: 1px solid rgba(0,0,0,0.08);
-  height: 64px;
+  border-bottom: 1px solid var(--card-border);
+  height: 72px;
   display: flex;
   align-items: center;
-  z-index: 50;
+  z-index: 1000;
+  transition: all 0.3s ease;
 }
 
 .nav-container {
@@ -232,8 +243,8 @@ button {
   width: 100%;
   padding: 0.6rem 1rem 0.6rem 2.5rem;
   background-color: var(--bg-secondary);
-  border: 1px solid rgba(0,0,0,0.05);
-  border-radius: 99px;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 0px;
   font-family: var(--font-sans);
   font-size: 0.9rem;
   transition: all 0.2s;
@@ -255,6 +266,12 @@ button {
   pointer-events: none;
 }
 
+.home-grid {
+  display: grid;
+  grid-template-columns: 2.2fr 1fr;
+  gap: 2.5rem;
+}
+
 .nav-actions {
   display: flex;
   align-items: center;
@@ -264,7 +281,7 @@ button {
 .profile-btn {
   width: 36px;
   height: 36px;
-  border-radius: 50%;
+  border-radius: 0px;
   background-color: var(--bg-secondary);
   display: flex;
   align-items: center;

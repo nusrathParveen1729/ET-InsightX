@@ -1,82 +1,179 @@
+import { supabase } from '../lib/supabaseClient';
+
 export const PersonalizationAgent = {
-  fetchFeed: async (persona) => {
+  // Logs an article view into Supabase (Now supporting relational UUIDs)
+  logArticleRead: async (profileId, articleId, category) => {
+    if (!profileId || !articleId) return;
+    
+    try {
+      let finalId = articleId;
+
+      // If the ID is a string slug, try to find the real UUID from the DB
+      if (articleId.length > 0 && !articleId.includes('-')) {
+        const { data } = await supabase
+          .from('articles')
+          .select('id')
+          .ilike('title', `%${articleId.replace('_', ' ')}%`)
+          .limit(1)
+          .maybeSingle();
+        
+        if (data) finalId = data.id;
+        else return; // Don't log if we can't find a valid reference
+      }
+
+      await supabase
+        .from('user_reading_history')
+        .insert([{ 
+          user_id: profileId, 
+          article_id: finalId, 
+          category: category 
+        }])
+        .select();
+      
+      console.log(`Live sync complete! ${storedArticles?.length || 0} business stories recorded.`);
+      return storedArticles || [];
+    } catch (err) {
+      console.error("Critical Failure in Live News Stream:", err);
+      return [];
+    }
+  },
+
+  // Fetches a personalized feed based on persona and actual articles in Supabase
+  fetchFeed: async (persona, profileId) => {
     // Simulate network delay
     await new Promise(resolve => setTimeout(resolve, 600));
+
+    let historyBonus = [];
+    let realNews = [];
+    
+    // 1. Adaptive News Fetch (Persona-Aware Filtering)
+    try {
+      // Define categories of interest for each persona
+      const interests = {
+        student: ['Economy', 'Education', 'Career'],
+        investor: ['Finance', 'Economy', 'Corporate'],
+        founder: ['Startup', 'Technology', 'Business'],
+        default: ['Economy', 'General']
+      };
+      
+      const targetCats = interests[persona] || interests.default;
+
+      // Fetch the latest Articles from Supabase that match these interests
+      const { data: dbArticles } = await supabase
+        .from('articles')
+        .select('*')
+        .in('category', targetCats)
+        .order('created_at', { ascending: false })
+        .limit(4);
+      
+      if (dbArticles && dbArticles.length > 0) {
+        realNews = dbArticles.map(art => ({
+          tag: art.category || "Live News",
+          title: art.title,
+          summary: art.content.split('|')[0].substring(0, 110) + "...",
+          image: art.image_url
+        }));
+      } else {
+        // Fallback: If no matches for the persona, pull the very latest news to ensure a live experience
+        console.log("No persona-specific matches, pulling latest general news stream...");
+        const { data: latest } = await supabase
+          .from('articles')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(4);
+        
+        if (latest) {
+          realNews = latest.map(art => ({
+            tag: art.category || "Top Story",
+            title: art.title,
+            summary: art.content.split('|')[0].substring(0, 110) + "...",
+            image: art.image_url
+          }));
+        }
+      }
+    } catch (err) {
+      console.error("Failed to fetch real-time persona feed", err);
+    }
+
+    // 2. Effortlessly boost recommendations based on user history
+    if (profileId) {
+      try {
+        const { data: history } = await supabase
+          .from('user_reading_history')
+          .select('category')
+          .eq('user_id', profileId)
+          .order('read_at', { ascending: false })
+          .limit(5);
+
+        if (history && history.length > 0) {
+          const topCategory = history[0].category;
+          historyBonus = [{ 
+            tag: topCategory, 
+            title: `Deep Dive: Your ${topCategory} focus`, 
+            summary: "Based on your recent reading, here is an AI-curated deep dive into this sector." 
+          }];
+        }
+      } catch (err) {
+        console.error("History fetch failed", err);
+      }
+    }
 
     const feeds = {
       default: {
         greeting: "Here's your personalized news intelligence.",
         briefings: [
+          ...historyBonus,
+          ...realNews,
           { tag: "Economy", title: "Union Budget 2026: Key Takeaways", summary: "AI analysis highlights a major push in infrastructure." },
-          { tag: "Tech", title: "Meta leaps over Alphabet", summary: "Tech giant reaches new milestones following AI breakthroughs." },
-          { tag: "Auto", title: "EV Sales projections double", summary: "Strong demand in Asian markets drives EV stocks up." }
         ],
         foryou: [
           { tag: "Startup", title: "Fintech startups secure $5B", summary: "VC funding pours into digital payments." },
-          { tag: "Finance", title: "Reserve Bank holds rates", summary: "Central banks signal cautious optimism." },
-          { tag: "Global", title: "Trade agreements signed", summary: "New pacts expected to boost export volumes." },
-          { tag: "Tech", title: "Semiconductor shortage ending", summary: "Supply chain bottlenecks ease up." }
+          { tag: "Finance", title: "Reserve Bank holds rates", summary: "Central banks signal cautious optimism." }
         ],
         insights: [
-          { type: 'alert', label: 'Market Alert', text: 'Tech stocks highly volatile today.', icon: 'alert' },
-          { type: 'success', label: 'Opportunity', text: 'Renewable energy sector bullish.', icon: 'up' },
-          { type: 'neutral', label: 'Trend Alert', text: 'Retail spending indicates recovery.', icon: 'zap' }
+          { type: 'alert', label: 'Market Alert', text: 'Tech stocks highly volatile today.', icon: 'alert' }
         ]
       },
       investor: {
         greeting: "Here's your mutual fund & portfolio intelligence.",
         briefings: [
-          { tag: "Portfolio", title: "Your Mid-Cap Tech Funds up 4.2%", summary: "AI analysis shows correlation with recent semiconductor announcements." },
-          { tag: "Bonds", title: "Government Yields Stabilize", summary: "Safe-haven assets return to median after budget anxiety." },
-          { tag: "Dividends", title: "Top 5 High-Yield Picks for Q3", summary: "Screener matches your risk profile to energy sector dividends." }
+          ...historyBonus,
+          ...realNews,
+          { tag: "Portfolio", title: "Your Mid-Cap Tech Funds up 4.2%", summary: "AI analysis shows correlation with recent semiconductor announcements." }
         ],
         foryou: [
-          { tag: "Earnings", title: "Reliance beats Q2 estimates", summary: "O2C and Retail segments drive 15% YoY growth." },
-          { tag: "Analysis", title: "Should you hold FMCG?", summary: "Inflation cooling suggests margin expansion in consumer goods." },
-          { tag: "Macro", title: "FII inflows hit 6-month high", summary: "Foreign institutional investors pivot back to emerging markets." },
-          { tag: "Insight", title: "NIFTY 50 technical resistance", summary: "Market approaches key psychological barrier." }
+          { tag: "Earnings", title: "Reliance beats Q2 estimates", summary: "O2C and Retail segments drive 15% YoY growth." }
         ],
         insights: [
-          { type: 'alert', label: 'Portfolio Warning', text: 'Auto sector exposure is currently 22% (High).', icon: 'alert' },
-          { type: 'success', label: 'Rebalance Suggestion', text: 'Consider shifting 5% to Debt funds to match risk profile.', icon: 'up' },
-          { type: 'neutral', label: 'Upcoming Event', text: 'TCS Earnings call tomorrow at 4 PM.', icon: 'zap' }
+          { type: 'alert', label: 'Portfolio Warning', text: 'Auto sector exposure is currently 22% (High).', icon: 'alert' }
         ]
       },
       founder: {
         greeting: "Here's your startup & competitor intelligence.",
         briefings: [
-          { tag: "Funding", title: "Series B valuations compress by 15%", summary: "AI models track 40+ deals this month showing tighter VCs." },
-          { tag: "Competitor", title: "Stripe launches local India payments", summary: "Direct threat to existing fintech gateways with aggressive pricing." },
-          { tag: "Policy", title: "New Angel Tax clarifications", summary: "DPIIT issues relief guidelines for registered startups." }
+          ...historyBonus,
+          ...realNews,
+          { tag: "Funding", title: "Series B valuations compress by 15%", summary: "AI models track 40+ deals this month showing tighter VCs." }
         ],
         foryou: [
-          { tag: "M&A", title: "Swiggy acquires local logistics player", summary: "Consolidation continues in the hyperlocal delivery space." },
-          { tag: "Talent", title: "Tech salaries normalize in 2026", summary: "Attrition rates drop below 14% as hiring frenzy cools." },
-          { tag: "SaaS", title: "AI-first tools drive B2B growth", summary: "Companies aggressively adopt copilots across vertical SaaS." },
-          { tag: "Compliance", title: "Digital Data Protection Act deadlines", summary: "Key dates founders must know for compliance architecture." }
+          { tag: "M&A", title: "Swiggy acquires local logistics player", summary: "Consolidation continues in the hyperlocal delivery space." }
         ],
         insights: [
-          { type: 'alert', label: 'Competitor Move', text: 'Razorpay filed a new patent related to blockchain ledgers.', icon: 'alert' },
-          { type: 'success', label: 'Grant Opportunity', text: 'MeitY unrolls ₹500Cr AI innovation fund. Apply by 15th.', icon: 'up' },
-          { type: 'neutral', label: 'Industry Trend', text: 'Founders shifting focus from growth to unit economics.', icon: 'zap' }
+          { type: 'alert', label: 'Competitor Move', text: 'Razorpay filed a new patent related to blockchain ledgers.', icon: 'alert' }
         ]
       },
       student: {
         greeting: "Here's your simplified business & career intelligence.",
         briefings: [
-          { tag: "Explainer", title: "What is exactly the 'Union Budget'?", summary: "AI breaks down the 120-page document into 5 simple concepts." },
-          { tag: "Careers", title: "Data Science vs AI Engineering", summary: "Which path holds more job security in 2026?" },
-          { tag: "101", title: "How does the stock market work?", summary: "A visual guide to understanding NIFTY and SENSEX." }
+          ...historyBonus,
+          ...realNews,
+          { tag: "Explainer", title: "What is exactly the 'Union Budget'?", summary: "AI breaks down the 120-page document into 5 simple concepts." }
         ],
         foryou: [
-          { tag: "Startup", title: "How a 22-year-old raised $1M", summary: "The story of building an AI scheduling tool in college." },
-          { tag: "Economy", title: "Why are things getting expensive?", summary: "Understanding inflation with practical everyday examples." },
-          { tag: "Prep", title: "Top interview questions for FinTech", summary: "Analyzed from 500+ recent graduate interviews." },
-          { tag: "News", title: "RBI cuts repo rate (Explained)", summary: "What it means for your college loan EMI." }
+          { tag: "Startup", title: "How a 22-year-old raised $1M", summary: "The story of building an AI scheduling tool in college." }
         ],
         insights: [
           { type: 'success', label: 'Internship Alert', text: 'Google opens applications for APM cohort 2027.', icon: 'up' },
-          { type: 'neutral', label: 'Concept Tip', text: 'Bull Market = Prices go up. Bear Market = Prices go down.', icon: 'zap' },
           { type: 'alert', label: 'Deadline', text: 'CAT 2026 registration window closes in 5 days.', icon: 'alert' }
         ]
       }

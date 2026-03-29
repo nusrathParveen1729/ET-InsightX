@@ -6,48 +6,28 @@ export const LocalizationAgent = {
     const map = {
       HI: {
         greeting: "नमस्ते, नूसरथ",
-        subtitle: "यहाँ आपके लिए व्यक्तिगत समाचार बुद्धिमत्ता है।",
-        aiBriefings: "एआई संक्षिप्त जानकारी",
+        subtitle: "आपका इंटेलिजेंस हब आज के इकोनॉमिक टाइम्स के पल्स के साथ सिंक्रोनाइज्ड है।",
+        realtimeAgents: "रियल-टाइम एजेंट सक्रिय",
+        aiBriefings: "एआई ब्रीफिंग्स",
         forYou: "आपके लिए",
-        quickInsights: "त्वरित अंतर्दृष्टि",
-        marketAlert: "बाज़ार चेतावनी",
+        quickInsights: "निष्पादन अंतर्दृष्टि",
+        marketAlert: "बाज़ार अलर्ट",
         opportunity: "अवसर",
-        trendAlert: "प्रवृत्ति चेतावनी",
-        search: "समाचार, कंपनियाँ, अर्थव्यवस्था खोजें...",
-        // Insights headers
-        'InternshipAlert': 'इंटर्नशिप अलर्ट',
-        'ConceptTip': 'अवधारणा टिप',
-        'Deadline': 'अंतिम तिथि',
-        'PortfolioWarning': 'पोर्टफोलियो चेतावनी',
-        'RebalanceSuggestion': 'पुनर्संतुलन सुझाव',
-        'UpcomingEvent': 'आगामी कार्यक्रम',
-        'CompetitorMove': 'प्रतिस्पर्धी कदम',
-        'GrantOpportunity': 'अनुदान अवसर',
-        'IndustryTrend': 'उद्योग प्रवृत्ति'
-      },
-      TA: {
-        greeting: "வணக்கம், நுஸ்ரத்",
-        subtitle: "இங்கே உங்கள் தனிப்பயனாக்கப்பட்ட செய்தி நுண்ணறிவு.",
-        aiBriefings: "ஏஐ சுருக்கங்கள்",
-        forYou: "உங்களுக்காக",
-        quickInsights: "விரைவான நுண்ணறிவு",
-        marketAlert: "சந்தை எச்சரிக்கை",
-        opportunity: "வாய்ப்பு",
-        trendAlert: "போக்கின் எச்சரிக்கை",
-        search: "செய்திகள், நிறுவனங்கள் தேடுங்கள்...",
-        'InternshipAlert': 'பயிற்சி எச்சரிக்கை',
-        'ConceptTip': 'கருத்து குறிப்பு',
-        'Deadline': 'கடைசி தேதி',
-        'PortfolioWarning': 'போர்ட்ஃபோலியோ எச்சரிக்கை',
-        'RebalanceSuggestion': 'மறுசீரமைப்பு பரிந்துரை',
-        'UpcomingEvent': 'எதிர்வரும் நிகழ்வு',
-        'CompetitorMove': 'போட்டியாளர் நகர்வு',
-        'GrantOpportunity': 'மானிய வாய்ப்பு',
-        'IndustryTrend': 'தொழில்துறை போக்கு'
+        trendAlert: "ट्रेंड अलर्ट",
+        search: "खबरें, कंपनियां खोजें...",
+        home: "होम",
+        adminMonitor: "एडमिन मॉनिटर",
+        initializeIntelligence: "इंटेलिजेंस शुरू करें",
+        selectPersona: "एजेंट तैनात करने के लिए व्यक्तित्व चुनें",
+        investor: "निवेशक",
+        founder: "संस्थापक",
+        student: "छात्र",
+        default: "डिफ़ॉल्ट"
       },
       TE: {
         greeting: "నమస్కారం, నుస్రత్",
-        subtitle: "మీ వ్యక్తిగతీకరించిన వార్తా మేధస్సు ఇక్కడ ఉంది.",
+        subtitle: "మీ ఇంటెలిజెన్స్ హబ్ నేటి ఎకనామిక్ టైమ్స్ పల్స్‌తో సమకాలీకరించబడింది.",
+        realtimeAgents: "రియల్ టైమ్ ఏజెంట్లు యాక్టివ్",
         aiBriefings: "ఏఐ సంక్షిప్తాలు",
         forYou: "మీ కోసం",
         quickInsights: "త్వరిత అంతర్దృష్టులు",
@@ -55,97 +35,78 @@ export const LocalizationAgent = {
         opportunity: "అవకాశం",
         trendAlert: "ట్రెండ్ హెచ్చరిక",
         search: "వార్తలు, కంపెనీలు శోధించండి...",
-        'InternshipAlert': 'ఇంటర్న్‌షిప్ హెచ్చరిక',
-        'ConceptTip': 'కాన్సెప్ట్ చిట్కా',
-        'Deadline': 'గడువు',
-        'PortfolioWarning': 'పోర్ట్‌ఫోలియో హెచ్చరిక',
-        'RebalanceSuggestion': 'రీబ్యాలెన్స్ సూచన',
-        'UpcomingEvent': 'రాబోయే ఈవెంట్',
-        'CompetitorMove': 'పోటీదారు కదలిక',
-        'GrantOpportunity': 'గ్రాంట్ అవకాశం',
-        'IndustryTrend': 'పరిశ్రమ ట్రెండ్'
+        home: "హోమ్",
+        adminMonitor: "అడ్మిన్ మానిటర్",
+        initializeIntelligence: "ఇంటెలిజెన్స్ ప్రారంభించండి",
+        selectPersona: "వ్యక్తిత్వాన్ని ఎంచుకోండి",
+        investor: "పెట్టుబడిదారుడు",
+        founder: "వ్యవస్థాపకుడు",
+        student: "విద్యార్థి",
+        default: "సాధారణ",
+        aiExecutiveSummary: "AI ఎగ్జిక్యూటివ్ సమ్మరీ",
+        coreStrategicInsights: "కోర్ స్ట్రాటజిక్ అంతర్దృష్టులు",
+        watchVideoBriefing: "AI వీడియో బ్రీఫింగ్ చూడండి",
+        portfolioDriftAnalysis: "పోర్ట్‌ఫోలియో డ్రిఫ్ట్ విశ్లేషణ",
+        marketSectorDNA: "మార్కెట్ సెక్టార్ DNA",
+        operationalActions: "కార్యాచరణ చర్యలు",
+        budgetTitle: "యూనియన్ బడ్జెట్ 2026: డిజిటల్ R&D మరియు మౌలిక సదుపాయాల విస్తరణపై దృష్టి"
       },
-      BN: {
-        greeting: "নমস্কার, নুসরাথ",
-        subtitle: "এখানে আপনার ব্যক্তিগতকৃত সংবাদ বুদ্ধিমত্তা।",
-        aiBriefings: "এআই ব্রিফিং",
-        forYou: "আপনার জন্য",
-        quickInsights: "দ্রুত অন্তর্দৃষ্টি",
-        marketAlert: "বাজার সতর্কতা",
-        opportunity: "সুযোগ",
-        trendAlert: "ট্রেন্ড সতর্কতা",
-        search: "খবর, কোম্পানি খুঁজুন...",
-        'InternshipAlert': 'ইন্টার্নশিপ সতর্কতা',
-        'ConceptTip': 'ধারণা টিপ',
-        'Deadline': 'শেষ তারিখ',
-        'PortfolioWarning': 'পোর্টফোলিও সতর্কতা',
-        'RebalanceSuggestion': 'রিব্যালেন্স পরামর্শ',
-        'UpcomingEvent': 'আসন্ন ইভেন্ট',
-        'CompetitorMove': 'প্রতযোগী পদক্ষেপ',
-        'GrantOpportunity': 'অনুদান সুযোগ',
-        'IndustryTrend': 'শিল্প প্রবণতা'
+      TA: {
+        greeting: "வணக்கம், நுஸ்ரத்",
+        subtitle: "உங்கள் நுண்ணறிவு மையம் இன்றைய எகனாமிக் டைம்ஸ் துடிப்புடன் ஒத்திசைக்கப்பட்டுள்ளது.",
+        realtimeAgents: "நிகழ்நேர முகவர்கள் செயலில் உள்ளனர்",
+        aiBriefings: "ஏஐ சுருக்கங்கள்",
+        forYou: "உங்களுக்காக",
+        quickInsights: "நிர்வாக நுண்ணறிவு",
+        search: "செய்திகள், நிறுவனங்களைத் தேடுங்கள்...",
+        home: "முகப்பு",
+        adminMonitor: "நிர்வாக கண்காணிப்பு"
       }
     };
     return map[languageCode] || null;
   },
 
-  // Translate feed content (Mock)
+  // Translate feed content
   translateFeed: async (feedData, languageCode) => {
     if (languageCode === 'EN') return feedData;
     
     await new Promise(resolve => setTimeout(resolve, 500));
-
-    // Deep clone to avoid mutating original
     const translatedFeed = JSON.parse(JSON.stringify(feedData));
     
-    // Hardcoded mock dictionaries for demonstration
     const contentDict = {
       HI: {
         "What is exactly the 'Union Budget'?": "'केंद्रीय बजट' वास्तव में क्या है?",
         "AI breaks down the 120-page document into 5 simple concepts.": "AI 120-पृष्ठ के दस्तावेज़ को 5 सरल अवधारणाओं में विभाजित करता है।",
+        "Deep Dive: Your Economy focus": "गहन विश्लेषण: आपका अर्थव्यवस्था फोकस",
+        "Based on your recent reading, here is an AI-curated deep dive into this sector.": "आपकी हालिया रीडिंग के आधार पर, इस क्षेत्र में एआई-क्यूरेटेड गहन विश्लेषण यहां दिया गया है।",
+        "AI Breakthrough in 2026": "2026 में एआई की बड़ी सफलता",
+        "This content is pulled for you from Supabase....": "यह सामग्री आपके लिए सुपाबेस से ली गई है....",
+        "VC Funding Trends": "वीसी फंडिंग रुझान",
+        "Startups are booming based on your previous history....": "आपके पिछले इतिहास के आधार पर स्टार्टअप फल-फूल रहे हैं....",
+        "Google opens applications for APM cohort 2027.": "गूगल ने APM बैच 2027 के लिए आवेदन खोले हैं।",
+        "CAT 2026 registration window closes in 5 days.": "CAT 2026 पंजीकरण विंडो 5 दिनों में बंद हो जाएगी।",
         "Data Science vs AI Engineering": "डेटा साइंस बनाम एआई इंजीनियरिंग",
         "Which path holds more job security in 2026?": "2026 में किस मार्ग में अधिक नौकरी सुरक्षा है?",
         "How does the stock market work?": "शेयर बाजार कैसे काम करता है?",
-        "A visual guide to understanding NIFTY and SENSEX.": "निफ्टी और सेंसेक्स को समझने के लिए एक दृश्य मार्गदर्शिका।",
-        "How a 22-year-old raised $1M": "एक 22 वर्षीय व्यक्ति ने $1M कैसे जुटाए",
-        "The story of building an AI scheduling tool in college.": "कॉलेज में एआई शेड्यूलिंग टूल बनाने की कहानी।",
-        "Why are things getting expensive?": "चीजें महंगी क्यों हो रही हैं?",
-        "Understanding inflation with practical everyday examples.": "व्यावहारिक रोजमर्रा के उदाहरणों के साथ मुद्रास्फीति को समझना।",
-        "Top interview questions for FinTech": "फिनटेक के लिए शीर्ष साक्षात्कार प्रश्न",
-        "Analyzed from 500+ recent graduate interviews.": "500 से अधिक हालिया स्नातक साक्षात्कारों से विश्लेषण किया गया।",
-        "RBI cuts repo rate (Explained)": "आरबीआई ने रेपो दर में कटौती की (व्याख्या)",
-        "What it means for your college loan EMI.": "आपके कॉलेज ऋण ईएमआई के लिए इसका क्या अर्थ है।",
-        "Google opens applications for APM cohort 2027.": "Google ने APM कोहोर्ट 2027 के लिए आवेदन खोले हैं।",
-        "Bull Market = Prices go up. Bear Market = Prices go down.": "बुल मार्केट = कीमतें ऊपर जाती हैं। बियर मार्केट = कीमतें नीचे जाती हैं।",
-        "CAT 2026 registration window closes in 5 days.": "CAT 2026 पंजीकरण विंडो 5 दिनों में बंद हो जाएगी।"
+        "A visual guide to understanding NIFTY and SENSEX.": "निफ्टी और सेंसेक्स को समझने के लिए एक दृश्य मार्गदर्शिका।"
       },
-      TA: {
-        "What is exactly the 'Union Budget'?": "'பட்ஜெட்' என்பது சரியாக என்ன?",
-        "AI breaks down the 120-page document into 5 simple concepts.": "120 பக்க ஆவணத்தை 5 எளிய கருத்துகளாக AI பிரிக்கிறது.",
-        "Data Science vs AI Engineering": "தரவு அறிவியல் vs AI பொறியியல்",
-        "How does the stock market work?": "பங்கு சந்தை எவ்வாறு செயல்படுகிறது?",
-        "Google opens applications for APM cohort 2027.": "APM 2027 க்கான заяவ்களை Google திறக்கிறது."
+      TE: {
+        "What is exactly the 'Union Budget'?": "'కేంద్ర బడ్జెట్' అంటే ఏమిటి?",
+        "AI breaks down the 120-page document into 5 simple concepts.": "AI 120-పేజీల పత్రాన్ని 5 సాధారణ అంశాలుగా విభజించింది.",
+        "Deep Dive: Your Economy focus": "లోతైన పరిశీలన: మీ ఆర్థిక దృష్టి",
+        "Based on your recent reading, here is an AI-curated deep dive into this sector.": "మీ ఇటీవలి పఠనం ఆధారంగా, ఈ రంగంపై ఎంపిక చేసిన ఎఐ సమాచారం ఇక్కడ ఉంది.",
+        "AI Breakthrough in 2026": "2026లో AI పురోగతి",
+        "This content is pulled for you from Supabase....": "ఈ సమాచారం మీ కోసం సుపాబేస్ నుండి తీసుకోబడింది....",
+        "VC Funding Trends": "VC నిధుల పోకడలు",
+        "Startups are booming based on your previous history....": "మీ మునుపటి చరిత్ర ఆధారంగా స్టార్టప్‌లు అభివృద్ధి చెందుతున్నాయి....",
+        "Google opens applications for APM cohort 2027.": "APM 2027 కోసం Google దరఖాస్తులను తెరిచింది.",
+        "Data Science vs AI Engineering": "డేటా సైన్స్ vs AI ఇంజనీరింగ్"
       }
     };
 
     const dict = contentDict[languageCode];
-    if (!dict) {
-      // If language not fully mapped, just append language code as a mock
-      const mapOrPrefix = (str) => dict?.[str] || `[${languageCode}] ` + str;
-      
-      translatedFeed.briefings.forEach(b => {
-        b.title = mapOrPrefix(b.title); b.summary = mapOrPrefix(b.summary);
-      });
-      translatedFeed.foryou.forEach(b => {
-        b.title = mapOrPrefix(b.title); b.summary = mapOrPrefix(b.summary);
-      });
-      translatedFeed.insights.forEach(i => {
-        i.text = mapOrPrefix(i.text);
-      });
-      return translatedFeed;
-    }
+    if (!dict) return translatedFeed;
 
-    // Replace exactly if in dictionary
     const translateText = (text) => dict[text] || text;
 
     translatedFeed.briefings.forEach(b => {
