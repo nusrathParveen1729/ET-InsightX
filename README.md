@@ -1,16 +1,64 @@
-# React + Vite
+# ET-InsightX 🚀
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Autonomous Financial News Intelligence: News that thinks, so you can execute.**
 
-Currently, two official plugins are available:
+ET-InsightX is a next-generation news synthesis platform that transforms raw financial data from The Economic Times into actionable, persona-aware intelligence. Powered by an autonomous agent array and a real-time orchestration engine.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 🔥 Key Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 🧠 Autonomous Agentic Workflows
+The application is driven by a custom-built **Workflow Engine** that coordinates a specialized agent array:
+*   **Synthesis Agent**: Condenses complex reports into tactical summaries.
+*   **Personalization Agent**: Tailors every insight to your unique role (Investor, Founder, Student).
+*   **Story-Arc Agent**: Tracks chronological event updates and predicts "What Happens Next."
+*   **Localization Agent**: Real-time UI and content translation (Hindi, Telugu, Tamil).
 
-## Expanding the ESLint configuration
+### ⚡ Decision Mode
+Move beyond headlines with structured data visualizers:
+*   **Portfolio Drift Analysis**: Maps news events directly to your financial exposure.
+*   **Fundamental Impact Matrix**: Predicts 2nd and 3rd-order consequences on secondary industries.
+*   **Market Sector DNA**: Real-time sectoral health and drift tracking.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 📊 Live Operations Monitor
+A dedicated **Admin Dashboard** tracks a high-fidelity audit trail of every agent sub-process.
+*   **SLA Breach Tracking**: Monitors agent response times against production thresholds.
+*   **Supabase Persistence**: Real-time logging and historical execution data.
+
+---
+
+## 🛠️ Tech Stack
+
+*   **Frontend**: React 19 + Vite 8 (Premium Vanilla CSS Design)
+*   **Routing**: React Router 7
+*   **Backend & DB**: Supabase (PostgreSQL + Real-time Sync)
+*   **Icons**: Lucide React
+*   **State Management**: React Context API (with Persisted Local Storage)
+
+---
+
+## 🚀 Getting Started
+
+### 1. Prerequisite
+Ensure you have **Node.js (LTS)** installed.
+
+### 2. Installation
+```bash
+# Clone the repository and navigate to the root
+npm install
+```
+
+### 3. Environment Setup
+Create a `.env` file in the root directory and add your Supabase credentials:
+```env
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+### 4. Launch the Engine
+```bash
+npm run dev
+```
+
+
