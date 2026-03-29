@@ -5,7 +5,7 @@ export const LocalizationAgent = {
 
     const map = {
       HI: {
-        greeting: "नमस्ते, नूसरथ",
+        greeting: "नमस्ते, {name}",
         subtitle: "आपका इंटेलिजेंस हब आज के इकोनॉमिक टाइम्स के पल्स के साथ सिंक्रोनाइज्ड है।",
         realtimeAgents: "रियल-टाइम एजेंट सक्रिय",
         aiBriefings: "एआई ब्रीफिंग्स",
@@ -22,10 +22,12 @@ export const LocalizationAgent = {
         investor: "निवेशक",
         founder: "संस्थापक",
         student: "छात्र",
-        default: "डिफ़ॉल्ट"
+        default: "डिफ़ॉल्ट",
+        enterYourName: "अपना नाम दर्ज करें",
+        personaIdentity: "एजेंट पहचान स्थापित करें"
       },
       TE: {
-        greeting: "నమస్కారం, నుస్రత్",
+        greeting: "నమస్కారం, {name}",
         subtitle: "మీ ఇంటెలిజెన్స్ హబ్ నేటి ఎకనామిక్ టైమ్స్ పల్స్‌తో సమకాలీకరించబడింది.",
         realtimeAgents: "రియల్ టైమ్ ఏజెంట్లు యాక్టివ్",
         aiBriefings: "ఏఐ సంక్షిప్తాలు",
@@ -49,10 +51,12 @@ export const LocalizationAgent = {
         portfolioDriftAnalysis: "పోర్ట్‌ఫోలియో డ్రిఫ్ట్ విశ్లేషణ",
         marketSectorDNA: "మార్కెట్ సెక్టార్ DNA",
         operationalActions: "కార్యాచరణ చర్యలు",
-        budgetTitle: "యూనియన్ బడ్జెట్ 2026: డిజిటల్ R&D మరియు మౌలిక సదుపాయాల విస్తరణపై దృష్టి"
+        budgetTitle: "యూనియన్ బడ్జెట్ 2026: డిజిటల్ R&D మరియు మౌలిక సదుపాయాల విస్తరణపై దృష్టి",
+        enterYourName: "మీ పేరు నమోదు చేయండి",
+        personaIdentity: "ఏజెంట్ గుర్తింపును స్థాపించండి"
       },
       TA: {
-        greeting: "வணக்கம், நுஸ்ரத்",
+        greeting: "வணக்கம், {name}",
         subtitle: "உங்கள் நுண்ணறிவு மையம் இன்றைய எகனாமிக் டைம்ஸ் துடிப்புடன் ஒத்திசைக்கப்பட்டுள்ளது.",
         realtimeAgents: "நிகழ்நேர முகவர்கள் செயலில் உள்ளனர்",
         aiBriefings: "ஏஐ சுருக்கங்கள்",
@@ -60,7 +64,9 @@ export const LocalizationAgent = {
         quickInsights: "நிர்வாக நுண்ணறிவு",
         search: "செய்திகள், நிறுவனங்களைத் தேடுங்கள்...",
         home: "முகப்பு",
-        adminMonitor: "நிர்வாக கண்காணிப்பு"
+        adminMonitor: "நிர்வாக கண்காணிப்பு",
+        enterYourName: "உங்கள் பெயரை உள்ளிடவும்",
+        personaIdentity: "முகவர் அடையாளத்தை நிறுவுங்கள்"
       }
     };
     return map[languageCode] || null;

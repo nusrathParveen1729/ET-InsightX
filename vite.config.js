@@ -6,5 +6,13 @@ export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
     include: ['@supabase/supabase-js', 'tslib']
+  },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+      }
+    }
   }
 })

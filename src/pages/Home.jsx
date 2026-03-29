@@ -2,18 +2,18 @@ import React, { useEffect, useState } from 'react';
 import Card from '../components/Card';
 import { Sparkles, TrendingUp, AlertCircle, Briefcase, Zap, Loader } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
-import { PersonalizationAgent } from '../agents/PersonalizationAgent';
 import { LocalizationAgent } from '../agents/LocalizationAgent';
+import { PersonalizationAgent } from '../agents/PersonalizationAgent';
 import { NewsIngestionAgent } from '../agents/NewsIngestionAgent';
 
 export default function Home() {
-  const { persona, language, profileId } = useAppContext();
+  const { persona, language, profileId, userName } = useAppContext();
   const [feed, setFeed] = useState(null);
   const [t, setT] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function loadAgents() {
+    async function loadData() {
       setLoading(true);
       
       // 1. Proactive Synchronization (No buttons needed!)
@@ -29,12 +29,13 @@ export default function Home() {
         PersonalizationAgent.fetchFeed(persona, profileId),
         LocalizationAgent.translatePage(language)
       ]);
+      
       const translatedFeed = await LocalizationAgent.translateFeed(rawFeed, language);
       setFeed(translatedFeed);
       setT(langDict);
       setLoading(false);
     }
-    loadAgents();
+    loadData();
   }, [persona, language, profileId]);
 
   if (loading || !feed) {
@@ -55,6 +56,9 @@ export default function Home() {
     }
   };
 
+  const briefings = feed.briefings || [];
+  const foryou = feed.foryou || [];
+
   return (
     <main className="container page-container animate-fade-in">
       <section className="hero-banner p-10 mb-24 mt-6 card shadow-xl" style={{ 
@@ -74,7 +78,9 @@ export default function Home() {
               <Sparkles size={12} className="red" /> {t?.realtimeAgents || "Realtime Agents Active"}
             </span>
           </div>
-          <h1 className="text-4xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>{t?.greeting || "Hi, Nusrath"}</h1>
+          <h1 className="text-4xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
+            {t?.greeting ? t.greeting.replace('{name}', userName) : `Hi, ${userName}`}
+          </h1>
           <p className="text-secondary text-lg" style={{ color: 'var(--text-secondary)' }}>
             {t?.subtitle || "Your intelligence hub is synchronized with today's Economic Times pulse."}
           </p>
@@ -91,14 +97,16 @@ export default function Home() {
               </h2>
             </div>
             <div className="briefing-cards">
-              {feed.briefings.map((b, idx) => (
+              {briefings.map((b, idx) => (
                 <Card 
                   key={idx}
-                  linkTo="/news"
-                  tag={b.tag}
+                  externalUrl={b.url}
+                  image={b.image}
+                  source={b.source}
+                  publishedAt={b.publishedAt}
                   title={b.title}
                   summary={b.summary}
-                  image={b.image}
+                  tag={b.tag}
                   className={idx === 0 ? "featured-briefing" : "small-briefing"}
                 />
               ))}
@@ -110,14 +118,16 @@ export default function Home() {
               <h2 className="section-title" style={{ color: 'var(--text-primary)', fontSize: '1.4rem', fontWeight: '800' }}>{t?.forYou || "For You"}</h2>
             </div>
             <div className="for-you-grid">
-              {feed.foryou.map((b, idx) => (
+              {foryou.map((b, idx) => (
                 <Card 
                   key={idx}
-                  linkTo="/news"
-                  tag={b.tag}
+                  externalUrl={b.url}
+                  image={b.image}
+                  source={b.source}
+                  publishedAt={b.publishedAt}
                   title={b.title}
                   summary={b.summary}
-                  image={b.image}
+                  tag={b.tag}
                 />
               ))}
             </div>
@@ -128,14 +138,14 @@ export default function Home() {
           <section className="insights-section card shadow-md" style={{ borderRadius: '0px', background: 'var(--bg-secondary)', border: '1px solid var(--card-border)' }}>
             <h2 className="section-title-small mb-6 text-center font-bold uppercase tracking-widest text-xs opacity-60" style={{ color: 'var(--text-secondary)' }}>{t?.quickInsights || "Execution Insights"}</h2>
             
-            {feed.insights.map((insight, idx) => (
+            {(feed.insights || []).map((insight, idx) => (
               <div key={idx} className={`insight-card ${insight.type === 'success' ? 'opportunity' : insight.type}`} style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', marginBottom: '12px', padding: '16px' }}>
                 <div className={`insight-icon ${insight.type}`} style={{ borderRadius: '0px' }}>
                   {renderIcon(insight.type)}
                 </div>
                 <div className="insight-content">
                   <span className="insight-label" style={{ color: 'var(--accent-red)' }}>
-                    {t?.[insight.label.replace(' ', '')] || insight.label}
+                    {t?.[insight.label?.replace(' ', '')] || insight.label}
                   </span>
                   <p className="insight-text" style={{ color: 'var(--text-secondary)' }}>{insight.text}</p>
                 </div>

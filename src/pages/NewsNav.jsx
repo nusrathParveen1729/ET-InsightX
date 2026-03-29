@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { PlayCircle, User, Sparkles, MoveUpRight } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { PlayCircle, User, Sparkles, MoveUpRight, ExternalLink } from 'lucide-react';
 import { PersonalizationAgent } from '../agents/PersonalizationAgent';
 import { LocalizationAgent } from '../agents/LocalizationAgent';
 import { useAppContext } from '../context/AppContext';
 
 export default function NewsNav() {
   const { profileId, language } = useAppContext();
+  const location = useLocation();
+  const article = location.state?.article;
   const [t, setT] = useState(null);
 
   useEffect(() => {
@@ -15,10 +17,10 @@ export default function NewsNav() {
 
   // Log article visit to Supabase for personalization history
   useEffect(() => {
-    if (profileId) {
-      PersonalizationAgent.logArticleRead(profileId, "UNION_BUDGET_2026", "Economy");
+    if (profileId && article?.title) {
+      PersonalizationAgent.logArticleRead(profileId, article.title, article.source || "Economy");
     }
-  }, [profileId]);
+  }, [profileId, article]);
 
   return (
     <main className="container page-container animate-fade-in" style={{paddingTop: '100px'}}>
@@ -27,19 +29,33 @@ export default function NewsNav() {
         <div className="article-main">
           {/* Headline Section */}
           <header className="article-header mb-8 pb-6" style={{borderBottom: '2px solid var(--text-primary)'}}>
-            <span className="tag" style={{background: 'var(--text-primary)', color: 'var(--bg-primary)', padding: '6px 16px', fontSize: '10px', fontWeight: 'bold', borderRadius: '0px'}}>ECONOMY & POLICY</span>
+            <span className="tag" style={{background: 'var(--text-primary)', color: 'var(--bg-primary)', padding: '6px 16px', fontSize: '10px', fontWeight: 'bold', borderRadius: '0px'}}>{article?.source || "ECONOMY & POLICY"}</span>
             <h1 className="text-5xl font-bold mt-4 mb-4" style={{letterSpacing: '-1.5px', lineHeight: '1.1', color: 'var(--text-primary)'}}>
-              {t?.budgetTitle || "Union Budget 2026 Focuses on Digital R&D and Infrastructure Expansion"}
+              {article?.title || t?.budgetTitle || "Union Budget 2026 Focuses on Digital R&D and Infrastructure Expansion"}
             </h1>
             <p className="text-secondary text-2xl font-serif italic" style={{opacity: 0.8, color: 'var(--text-secondary)'}}>
-              "{t?.budgetQuote || "A decisive push to transition the economy towards advanced technologies while sustaining foundational sectors."}"
+              "{article?.description || t?.budgetQuote || "A decisive push to transition the economy towards advanced technologies while sustaining foundational sectors."}"
             </p>
             
-            <Link to="/video" className="btn-primary mt-6" style={{padding: '14px 28px', borderRadius: '0px', background: 'var(--accent-red)', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px', color: 'white'}}>
-              <PlayCircle size={20} />
-              {t?.watchVideoBriefing || "Watch AI Video Briefing"}
-            </Link>
+            <div className="flex gap-4 mt-6">
+              <Link to="/video" className="btn-primary" style={{padding: '14px 28px', borderRadius: '0px', background: 'var(--accent-red)', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px', color: 'white'}}>
+                <PlayCircle size={20} />
+                {t?.watchVideoBriefing || "Watch AI Video Briefing"}
+              </Link>
+              {article?.url && (
+                <a href={article.url} target="_blank" rel="noopener noreferrer" className="btn-outline flex-center gap-2" style={{display:'inline-flex', alignItems:'center', padding: '14px 28px', borderRadius: '0px', border: '1px solid var(--text-primary)', color: 'var(--text-primary)', fontWeight: 'bold'}}>
+                  <ExternalLink size={18} />
+                  Read Full Source Article
+                </a>
+              )}
+            </div>
           </header>
+
+          {article?.image && (
+            <div className="mb-8">
+              <img src={article.image} alt={article.title} className="w-full h-[400px] object-cover rounded-xl shadow-sm" style={{width:'100%', height:'400px', objectFit:'cover', borderRadius:'0px', marginBottom: '24px'}} />
+            </div>
+          )}
 
           <div className="grid-content" style={{display: 'flex', flexDirection: 'column', gap: '2.5rem'}}>
             
@@ -49,7 +65,7 @@ export default function NewsNav() {
                 <Sparkles className="red" size={24} /> {t?.aiExecutiveSummary || "AI Executive Summary"}
               </h3>
               <p className="article-body text-lg" style={{lineHeight: '1.9', color: 'var(--text-primary)'}}>
-                {t?.budgetSummary || "The 2026 Union Budget allocates unprecedented capital towards artificial intelligence R&D, EV subsidies, and rural connectivity. The Finance Ministry highlighted that 4% of GDP will be directly channeled into modernizing supply chains. This aims to secure long-term domestic self-reliance against global supply shortages."}
+                {article?.description || t?.budgetSummary || "The 2026 Union Budget allocates unprecedented capital towards artificial intelligence R&D, EV subsidies, and rural connectivity. The Finance Ministry highlighted that 4% of GDP will be directly channeled into modernizing supply chains. This aims to secure long-term domestic self-reliance against global supply shortages."}
               </p>
               <div className="text-xs font-bold text-red mt-6 uppercase tracking-widest border-t pt-4" style={{opacity: 0.6, color: 'var(--accent-red)'}}>
                 ALGORITHMIC SYNTHESIS: 8 ET SOURCES SYNCED
@@ -91,50 +107,84 @@ export default function NewsNav() {
                 <div className="impact-analysis">
                   <h4 className="font-bold text-lg mb-4 uppercase tracking-wider" style={{color: 'var(--text-primary)'}}>AI Recommendation</h4>
                   <p className="text-secondary mb-8 leading-relaxed" style={{fontSize: '1.1rem', color: 'var(--text-secondary)'}}>
-                    Given your heavy investment in tech stocks, this budget is highly favorable. However, your FMCG holdings might see short-term stagnation due to unaltered consumer duties.
+                    Based on your profile, this development has significant implications for your current strategy. We recommend active monitoring of correlated sectors.
                   </p>
                   <Link to="/tracker" className="btn-outline" style={{padding: '12px 24px', borderRadius: '0px', borderColor: 'var(--text-primary)', fontSize: '12px', fontWeight: 'bold', color: 'var(--text-primary)'}}>TRACK STORY EVOLUTION</Link>
                 </div>
                 <div className="impact-actions p-8" style={{background: 'var(--bg-secondary)', border: '1px solid var(--card-border)', borderRadius: '0px'}}>
                   <h4 className="font-bold text-xs uppercase tracking-widest mb-6 opacity-80 border-b pb-2" style={{color: 'var(--text-secondary)', borderColor: 'var(--card-border)'}}>{t?.operationalActions || "Operational Actions"}</h4>
                   <ul className="action-list" style={{listStyle: 'none', padding: 0}}>
-                    <li className="flex items-start gap-4 text-sm mb-6" style={{color: 'var(--text-primary)'}}><MoveUpRight size={18} className="red mt-1" /> <span className="font-bold">SHIFT 5% CAPITAL TO SEMICONDUCTOR ETFs.</span></li>
-                    <li className="flex items-start gap-4 text-sm" style={{color: 'var(--text-primary)'}}><MoveUpRight size={18} className="red mt-1" /> <span className="font-bold">EXECUTE PRICE ALERTS FOR GREEN-ENERGY MID-CAPS.</span></li>
+                    <li className="flex items-start gap-4 text-sm mb-6" style={{color: 'var(--text-primary)'}}><MoveUpRight size={18} className="red mt-1" /> <span className="font-bold">RE-EVALUATE SECTOR WEIGHTS.</span></li>
+                    <li className="flex items-start gap-4 text-sm" style={{color: 'var(--text-primary)'}}><MoveUpRight size={18} className="red mt-1" /> <span className="font-bold">SET VOLATILITY ALERTS.</span></li>
                   </ul>
                 </div>
               </div>
             </section>
+
+            {/* Fundamental Impact Analysis Card */}
+            <section className="card p-8 shadow-sm" style={{background: 'var(--bg-secondary)', border: '1.5px solid var(--card-border)', borderRadius: '0px'}}>
+               <h3 className="section-title-small font-bold mb-8 uppercase tracking-tight" style={{fontSize: '1.2rem', borderLeft: '4px solid var(--accent-red)', paddingLeft: '12px', color: 'var(--text-primary)'}}>
+                 Fundamental Impact Analysis
+               </h3>
+               <div className="impact-matrix" style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem'}}>
+                  <div className="impact-tile p-6" style={{border: '1px solid var(--card-border)', background: 'var(--card-bg)'}}>
+                    <span className="text-[10px] font-black uppercase opacity-60 block mb-2" style={{color: 'var(--text-secondary)'}}>Primary Industry</span>
+                    <h5 className="font-black text-sm mb-2" style={{color: 'var(--text-primary)'}}>SEMICONDUCTORS</h5>
+                    <p className="text-xs leading-relaxed" style={{color: 'var(--text-secondary)'}}>Unbound CapEx potential with direct tax breaks and PLI schemes.</p>
+                    <div className="mt-4 text-[10px] font-black" style={{color: '#10b981'}}>POSSITIVE SENTIMENT (88%)</div>
+                  </div>
+                  <div className="impact-tile p-6" style={{border: '1px solid var(--card-border)', background: 'var(--card-bg)'}}>
+                    <span className="text-[10px] font-black uppercase opacity-60 block mb-2" style={{color: 'var(--text-secondary)'}}>Secondary Impact</span>
+                    <h5 className="font-black text-sm mb-2" style={{color: 'var(--text-primary)'}}>AUTOMOTIVE</h5>
+                    <p className="text-xs leading-relaxed" style={{color: 'var(--text-secondary)'}}>Lowering component costs long-term but short-term supply bottleneck.</p>
+                    <div className="mt-4 text-[10px] font-black" style={{color: '#f59e0b'}}>NEUTRAL IMPACT (52%)</div>
+                  </div>
+                  <div className="impact-tile p-6" style={{border: '1px solid var(--card-border)', background: 'var(--card-bg)'}}>
+                    <span className="text-[10px] font-black uppercase opacity-60 block mb-2" style={{color: 'var(--text-secondary)'}}>Tertiary Spillover</span>
+                    <h5 className="font-black text-sm mb-2" style={{color: 'var(--text-primary)'}}>SMART CITIES</h5>
+                    <p className="text-xs leading-relaxed" style={{color: 'var(--text-secondary)'}}>Push in Tier-III cities will drive demand for localized IT infra.</p>
+                    <div className="mt-4 text-[10px] font-black" style={{color: '#10b981'}}>LONG-TERM GROWTH (74%)</div>
+                  </div>
+               </div>
+            </section>
+
+            {/* Market Sector DNA moved from sidebar */}
+            <section className="sector-impact card shadow-xl p-8" style={{borderRadius: '0px', border: '2px solid var(--text-primary)', background: 'var(--card-bg)'}}>
+              <h3 className="section-title-small font-black mb-8 border-b pb-4 uppercase tracking-tighter" style={{fontSize: '1.3rem', color: 'var(--text-primary)', borderColor: 'var(--card-border)'}}>{t?.marketSectorDNA || "Market Sector DNA"}</h3>
+              <div className="space-y-10 flex flex-col gap-8">
+                <div className="sector-bar">
+                  <div className="sector-info mb-3 flex justify-between uppercase text-xs font-black" style={{color: 'var(--text-primary)'}}>
+                    <span>Technology</span>
+                    <span className="success">+8.5% DRIFT</span>
+                  </div>
+                  <div className="progress-bg" style={{height: '12px', border: '1px solid var(--card-border)'}}><div className="progress-fill success" style={{width: '85%', borderRadius: '0px'}}></div></div>
+                </div>
+                <div className="sector-bar">
+                  <div className="sector-info mb-3 flex justify-between uppercase text-xs font-black" style={{color: 'var(--text-primary)'}}>
+                    <span>Infrastructure</span>
+                    <span className="success">+7.0% DRIFT</span>
+                  </div>
+                  <div className="progress-bg" style={{height: '12px', border: '1px solid var(--card-border)'}}><div className="progress-fill success" style={{width: '70%', borderRadius: '0px'}}></div></div>
+                </div>
+                <div className="sector-bar">
+                  <div className="sector-info mb-3 flex justify-between uppercase text-xs font-black" style={{color: 'var(--text-primary)'}}>
+                    <span>FMCG</span>
+                    <span className="danger">-2.1% DRIFT</span>
+                  </div>
+                  <div className="progress-bg" style={{height: '12px', border: '1px solid var(--card-border)'}}><div className="progress-fill danger" style={{width: '30%', borderRadius: '0px'}}></div></div>
+                </div>
+              </div>
+              
+              <button className="btn-outline w-full mt-10 text-xs font-black py-4 uppercase tracking-widest hover:bg-black hover:text-white transition-all" style={{borderRadius: '0px', border: '2px solid var(--text-primary)', color: 'var(--text-primary)'}}>Initialize Sector Deep-Dive</button>
+            </section>
+
           </div>
         </div>
 
         <aside className="article-sidebar sidebar">
-          <div className="sector-impact card shadow-xl p-8" style={{borderRadius: '0px', border: '2px solid var(--text-primary)', background: 'var(--card-bg)', position: 'sticky', top: '100px'}}>
-            <h3 className="section-title-small font-black mb-8 border-b pb-4 uppercase tracking-tighter" style={{fontSize: '1.3rem', color: 'var(--text-primary)', borderColor: 'var(--card-border)'}}>{t?.marketSectorDNA || "Market Sector DNA"}</h3>
-            <div className="space-y-10 flex flex-col gap-8">
-              <div className="sector-bar">
-                <div className="sector-info mb-3 flex justify-between uppercase text-xs font-black" style={{color: 'var(--text-primary)'}}>
-                  <span>Technology</span>
-                  <span className="success">+8.5% DRIFT</span>
-                </div>
-                <div className="progress-bg" style={{height: '12px', border: '1px solid var(--card-border)'}}><div className="progress-fill success" style={{width: '85%', borderRadius: '0px'}}></div></div>
-              </div>
-              <div className="sector-bar">
-                <div className="sector-info mb-3 flex justify-between uppercase text-xs font-black" style={{color: 'var(--text-primary)'}}>
-                  <span>Infrastructure</span>
-                  <span className="success">+7.0% DRIFT</span>
-                </div>
-                <div className="progress-bg" style={{height: '12px', border: '1px solid var(--card-border)'}}><div className="progress-fill success" style={{width: '70%', borderRadius: '0px'}}></div></div>
-              </div>
-              <div className="sector-bar">
-                <div className="sector-info mb-3 flex justify-between uppercase text-xs font-black" style={{color: 'var(--text-primary)'}}>
-                  <span>FMCG</span>
-                  <span className="danger">-2.1% DRIFT</span>
-                </div>
-                <div className="progress-bg" style={{height: '12px', border: '1px solid var(--card-border)'}}><div className="progress-fill danger" style={{width: '30%', borderRadius: '0px'}}></div></div>
-              </div>
-            </div>
-            
-            <button className="btn-outline w-full mt-10 text-xs font-black py-4 uppercase tracking-widest hover:bg-black hover:text-white transition-all" style={{borderRadius: '0px', border: '2px solid var(--text-primary)', color: 'var(--text-primary)'}}>Initialize Sector Deep-Dive</button>
+          <div className="sidebar-extra card p-6" style={{borderRadius: '0px', border: '1px solid var(--card-border)', background: 'var(--card-bg)', position: 'sticky', top: '100px'}}>
+             <h4 className="text-xs uppercase font-black mb-4 opacity-70">Deep Pulse Analysis</h4>
+             <p className="text-xs text-secondary leading-relaxed">Our AI agents are monitoring 42 alternate news streams for this story evolution.</p>
           </div>
         </aside>
 

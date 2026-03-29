@@ -1,5 +1,5 @@
 export const SynthesisAgent = {
-  chat: async (query, contextSnippet) => {
+  chat: async (query) => {
     await new Promise(resolve => setTimeout(resolve, 800)); // Simulate thinking
 
     const queryLower = query.toLowerCase();

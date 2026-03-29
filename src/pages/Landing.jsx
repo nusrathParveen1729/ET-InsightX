@@ -5,9 +5,10 @@ import { useAppContext } from '../context/AppContext';
 import { LocalizationAgent } from '../agents/LocalizationAgent';
 
 export default function Landing() {
-  const { setPersona, language } = useAppContext();
+  const { setPersona, language, userName, updateUserName } = useAppContext();
   const navigate = useNavigate();
   const [t, setT] = useState(null);
+  const [localName, setLocalName] = useState(userName === 'Guest' ? '' : userName);
 
   useEffect(() => {
     LocalizationAgent.translatePage(language).then(dict => setT(dict));
@@ -41,6 +42,9 @@ export default function Landing() {
   ];
 
   const handleSelect = (id) => {
+    if (localName.trim()) {
+      updateUserName(localName.trim());
+    }
     setPersona(id);
     navigate('/home');
   };
@@ -48,11 +52,35 @@ export default function Landing() {
   return (
     <main className="landing-container" style={{ minHeight: '100vh', background: 'var(--bg-primary)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '60px 20px' }}>
       
-      <div className="landing-header text-center" style={{ marginBottom: '80px', maxWidth: '900px' }}>
+      <div className="landing-header text-center" style={{ marginBottom: '60px', maxWidth: '900px' }}>
         <h1 className="font-black uppercase tracking-tighter" style={{ fontSize: '4rem', marginBottom: '10px', lineHeight: '0.9', color: 'var(--text-primary)' }}>
           {t?.initializeIntelligence?.split(' ')[0] || 'Initialize'} <span style={{ color: 'var(--accent-red)' }}>{t?.initializeIntelligence?.split(' ')[1] || 'Intelligence'}</span>
         </h1>
         <div style={{ width: '120px', height: '6px', background: 'var(--accent-red)', margin: '20px auto' }}></div>
+        
+        {/* Name Input for Personalization */}
+        <div className="name-input-container mt-8 mb-8" style={{maxWidth: '400px', margin: '40px auto'}}>
+           <input 
+             type="text" 
+             placeholder={t?.enterYourName || "Enter Your Name"}
+             value={localName}
+             onChange={(e) => setLocalName(e.target.value)}
+             className="premium-input w-full text-center"
+             style={{
+               background: 'transparent',
+               border: 'none',
+               borderBottom: '2px solid var(--accent-red)',
+               fontSize: '1.5rem',
+               padding: '10px',
+               color: 'var(--text-primary)',
+               fontFamily: 'var(--font-serif)',
+               outline: 'none',
+               transition: 'all 0.3s'
+             }}
+           />
+           <p className="text-secondary text-[10px] uppercase font-black tracking-widest mt-2" style={{opacity: 0.5}}>{t?.personaIdentity || "Establish Agent Identity"}</p>
+        </div>
+
         <p className="text-secondary uppercase font-bold tracking-widest text-xs" style={{ opacity: 0.8, marginTop: '20px', color: 'var(--text-secondary)' }}>
           {t?.selectPersona || 'Select your tactical persona to deploy agent array'}
         </p>
